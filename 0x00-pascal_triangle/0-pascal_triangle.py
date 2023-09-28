@@ -11,12 +11,17 @@ def pascal_triangle(n):
     if n <= 0:
         return []
     
-    p = [0]
+    pt = []
     
     for x in range(1, n + 1):
-        c = 1
-        for y in range(1, x + 1):
-            c = c * (x - y) // y
-            p[y] = c
+        z = 1
+        tempo = [1]
+        for y in range(1, x):
+            # using Binomial Coefficient
+            z = z * (x - y) // y
+            tempo.append(z)
+        # tempo.append(1)
+        pt.append(tempo)
+        # print(p)
     
-    return p
+    return pt
