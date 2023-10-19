@@ -33,7 +33,7 @@ def status_code(code):
     """
     valid_codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
 
-    if status_code in valid_codes:
+    if code in valid_codes:
         return True
 
     else:
