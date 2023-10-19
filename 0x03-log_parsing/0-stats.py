@@ -22,8 +22,8 @@ def validate(logging):
     """
     if len(logging.split()) < 7:
         return False
-    
-    else: 
+
+    else:
         return True
 
 
@@ -35,7 +35,7 @@ def status_code(code):
 
     if status_code in valid_codes:
         return True
-    
+
     else:
         return False
 
