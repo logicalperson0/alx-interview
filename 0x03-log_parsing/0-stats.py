@@ -40,11 +40,11 @@ def log_stats():
                 total_size += file_size
             except(IndexError, ValueError):
                 pass
-        
+
         print("File size: {}".format(total_size))
         for status in sorted(valid_codes_count):
             print('{}: {}'.format(status, valid_codes_count[status]))
-    
+
     except KeyboardInterrupt:
         print("File size: {}".format(total_size))
         for status in sorted(valid_codes_count):
