@@ -1,50 +1,48 @@
 #!/usr/bin/python3
 """
-log parsing
+module for script that reads stdin line by line and computes metrics
 """
-
 import sys
-import re
 
 
-def output(log: dict) -> None:
-    """
-    helper function to display stats
-    """
-    print("File size: {}".format(log["file_size"]))
-    for code in sorted(log["code_frequency"]):
-        if log["code_frequency"][code]:
-            print("{}: {}".format(code, log["code_frequency"][code]))
-
-
-if __name__ == "__main__":
-    regex = re.compile(
-    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)')  # nopep8
-
-    line_count = 0
-    log = {}
-    log["file_size"] = 0
-    log["code_frequency"] = {
-        str(code): 0 for code in [
-            200, 301, 400, 401, 403, 404, 405, 500]}
+def log_stats():
+    """Reads from stdin from piping"""
+    count = 0
+    total_size = 0
+    status_code = ['200', '301', '400', '401', '403', '404', '405', '500']
+    valid_codes_count = {}
 
     try:
         for line in sys.stdin:
-            line = line.strip()
-            match = regex.fullmatch(line)
-            if (match):
-                line_count += 1
-                code = match.group(1)
-                file_size = int(match.group(2))
+            if count == 10:
+                print("File size: {}".format(total_size))
+                for status in sorted(valid_codes_count):
+                    print('{}: {}'.format(status, valid_codes_count[status]))
+                count = 1
+            else:
+                count += 1
 
-                # File size
-                log["file_size"] += file_size
+            fields = line.split()
 
-                # status code
-                if (code.isdecimal()):
-                    log["code_frequency"][code] += 1
+            file_size = int(fields[-1])
+            total_size += file_size
 
-                if (line_count % 10 == 0):
-                    output(log)
-    finally:
-        output(log)
+            valid_codes = fields[-2]
+            if valid_codes in status_code:
+                if valid_codes_count.get(valid_codes, -1) == -1:
+                    valid_codes_count[valid_codes] = 1
+                else:
+                    valid_codes_count[valid_codes] += 1
+
+        print("File size: {}".format(total_size))
+        for status in sorted(valid_codes_count):
+            print('{}: {}'.format(status, valid_codes_count[status]))
+
+    except KeyboardInterrupt:
+        print("File size: {}".format(total_size))
+        for status in sorted(valid_codes_count):
+            print('{}: {}'.format(status, valid_codes_count[status]))
+
+
+if __name__ == "__main__":
+    log_stats()
