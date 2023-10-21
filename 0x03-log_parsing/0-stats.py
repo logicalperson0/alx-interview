@@ -15,36 +15,41 @@ def log_stats():
 
     try:
         for line in sys.stdin:
+            if count == 10:
+                print("File size: {}".format(total_size))
+                for status in sorted(valid_codes_count):
+                    print('{}: {}'.format(status, valid_codes_count[status]))
+                count = 1
+            else:
+                count += 1
 
             fields = line.split()
 
             file_size = int(fields[-1])
             valid_codes = fields[-2]
-            if valid_codes in status_code:
-                if valid_codes_count.get(valid_codes, -1) == -1:
-                    valid_codes_count[valid_codes] = 1
-                else:
-                    valid_codes_count[valid_codes] += 1
+            try:
+                if valid_codes in status_code:
+                    if valid_codes_count.get(valid_codes, -1) == -1:
+                        valid_codes_count[valid_codes] = 1
+                    else:
+                        valid_codes_count[valid_codes] += 1
+            except IndexError:
+                pass
 
-                
-            total_size += file_size
+            try:
+                total_size += file_size
+            except(IndexError, ValueError):
+                pass
 
-            if count == 10:
-                print ("File size: {}".format(total_size))
-                for status in sorted(valid_codes_count):
-                    print ('{}: {}'.format(status, valid_codes_count[status]))
-                count = 1
-            else:
-                count += 1
-        print ("File size: {}".format(total_size))
+        print("File size: {}".format(total_size))
         for status in sorted(valid_codes_count):
-            print ('{}: {}'.format(status, valid_codes_count[status]))
-    
+            print('{}: {}'.format(status, valid_codes_count[status]))
+
     except KeyboardInterrupt:
-        print ("File size: {}".format(total_size))
+        print("File size: {}".format(total_size))
         for status in sorted(valid_codes_count):
-            print ('{}: {}'.format(status, valid_codes_count[status]))
-            
+            print('{}: {}'.format(status, valid_codes_count[status]))
+
 
 if __name__ == "__main__":
     log_stats()
