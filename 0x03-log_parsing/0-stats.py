@@ -29,7 +29,10 @@ def log_stats():
             except ValueError:
                 pass
 
-            valid_codes = fields[-2]
+            try:
+                valid_codes = fields[-2]
+            except IndexError:
+                pass
             if valid_codes in status_code:
                 if valid_codes_count.get(valid_codes, -1) == -1:
                     valid_codes_count[valid_codes] = 1
