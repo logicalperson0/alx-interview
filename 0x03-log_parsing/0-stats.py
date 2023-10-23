@@ -31,13 +31,13 @@ def log_stats():
 
             try:
                 valid_codes = fields[-2]
+                if valid_codes in status_code:
+                    if valid_codes_count.get(valid_codes, -1) == -1:
+                        valid_codes_count[valid_codes] = 1
+                    else:
+                        valid_codes_count[valid_codes] += 1
             except (IndexError, ValueError, KeyError):
                 pass
-            if valid_codes in status_code:
-                if valid_codes_count.get(valid_codes, -1) == -1:
-                    valid_codes_count[valid_codes] = 1
-                else:
-                    valid_codes_count[valid_codes] += 1
 
         print("File size: {}".format(total_size))
         for status in sorted(valid_codes_count):
