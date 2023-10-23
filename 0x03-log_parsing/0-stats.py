@@ -23,9 +23,11 @@ def log_stats():
                 count += 1
 
             fields = line.split()
-
-            file_size = int(fields[-1])
-            total_size += file_size
+            try:
+                file_size = int(fields[-1])
+                total_size += file_size
+            except ValueError:
+                pass
 
             valid_codes = fields[-2]
             if valid_codes in status_code:
