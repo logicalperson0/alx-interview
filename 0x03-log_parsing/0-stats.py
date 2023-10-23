@@ -31,7 +31,7 @@ def log_stats():
 
             try:
                 valid_codes = fields[-2]
-            except IndexError:
+            except (IndexError, ValueError, KeyError):
                 pass
             if valid_codes in status_code:
                 if valid_codes_count.get(valid_codes, -1) == -1:
