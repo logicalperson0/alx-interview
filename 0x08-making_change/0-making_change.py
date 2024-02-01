@@ -8,7 +8,22 @@ def makeChange(coins, total):
     """Return: fewest number of coins needed to meet total"""
     if (total <= 0):
         return 0
-    #coins.sort()
+
+    coins.sort(reverse=True)
+    num_coins = 0
+    nums = 0
+
+    for x in coins:
+        while nums < total:
+            nums += x
+            num_coins += 1
+        if nums == total:
+            return num_coins
+        nums -= x
+        num_coins -= 1
+    return -1
+
+  # coins.sort()
     """
     i = -1
     num_coins = 0
@@ -36,15 +51,3 @@ def makeChange(coins, total):
                     elif nums == total:
                         return num_coins
       """
-    check = 0
-    temp = 0
-    coins.sort(reverse=True)
-    for i in coins:
-        while check < total:
-            check += i
-            temp += 1
-        if check == total:
-            return temp
-        check -= i
-        temp -= 1
-    return -1
