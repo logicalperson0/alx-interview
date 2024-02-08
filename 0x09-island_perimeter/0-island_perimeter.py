@@ -19,5 +19,5 @@ def island_perimeter(grid):
                     z += 1
                 if y == (len(grid[0]) - 1) or grid[x][y + 1] == 0:
                     z += 1
-                
+
     return (z)
