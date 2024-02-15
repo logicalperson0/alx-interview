@@ -37,8 +37,13 @@ def isWinner(x, nums):
         # If no definite winner yet, Maria loses after ben's move
         wins_ben += 1
 
-    return "Maria"\
-        if wins_maria > wins_ben else "Ben" if wins_ben > wins_maria else None
+    if wins_maria > wins_ben:
+        return "Maria"
+    else:
+        if wins_ben > wins_maria:
+            return "Ben"
+        else:
+            return None
 
 
 def is_prime(num):
