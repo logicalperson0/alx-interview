@@ -28,6 +28,6 @@ def isWinner(x, nums):
     # Determine the winner based on the parity of the
     # number of primes remaining
     if sum(primes_remaining[::2]) % 2 == 0:
-        return "Maria"
+        return "Winner: Maria"
     else:
-        return "Ben"
+        return "Winner: Ben"
