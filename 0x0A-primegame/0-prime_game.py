@@ -5,29 +5,65 @@
 def isWinner(x, nums):
     """Maria and Ben are playing a game
     Result: Ben has the most wins"""
-    # benwins = 0
-    # mariawins = 0
+    wins_ben = 0
+    wins_maria = 0
+    n = len(nums)
 
-    sieve = [True] * (max(nums) + 1)
-    sieve[0] = sieve[1] = False
-    for i in range(2, int(max(nums)**0.5) + 1):
-        if sieve[i]:
-            for j in range(i * i, max(nums) + 1, i):
-                sieve[j] = False
+    for _ in range(x):
+        # First move for Maria
+        if n == 1:
+            wins_maria += 1
+            continue
 
-    # Count the number of primes remaining after each round
-    primes_remaining = [sum(sieve[i] for i in nums)]
-    for _ in range(x - 1):
-        # Remove multiples of the chosen prime from the sieve
-        prime = max(i for i in range(2, max(nums) + 1)
-                    if sieve[i] and i in nums)
-        for j in range(prime * prime, max(nums) + 1, prime):
-            sieve[j] = False
-        primes_remaining.append(sum(sieve[i] for i in nums))
+        # Find a suitable prime for Maria if possible
+        prime_found = False
+        for num in nums:
+            if is_prime(num) and (n - len(get_multiples(num, n))) > (n // 2):
+                nums = [i for i in nums if i % num != 0]
+                n = len(nums)
+                prime_found = True
+                break
 
-    # Determine the winner based on the parity of the
-    # number of primes remaining
-    if sum(primes_remaining[::2]) % 2 == 0:
-        return "Winner: Maria"
-    else:
-        return "Winner: Ben"
+        # Check if Maria won after her move
+        if n == 0:
+            wins_maria += 1
+            continue
+
+        # Check if Ben can win with a single move after Maria's move
+        if n > 2 and (nums[0] % 2 == 0 and get_common_diff(nums) % 2 == 0):
+            wins_ben += 1
+            continue
+
+        # If no definite winner yet, Maria loses after ben's move
+        wins_ben += 1
+
+    return "Maria"\
+        if wins_maria > wins_ben else "Ben" if wins_ben > wins_maria else None
+
+
+def is_prime(num):
+    """
+    Checks if a number is prime.
+    """
+    if num <= 1:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
+
+def get_multiples(num, n):
+    """
+    Gets all multiples of a number within a range.
+    """
+    return [i for i in range(1, n + 1) if i % num == 0]
+
+
+def get_common_diff(nums):
+    """
+    Gets the common difference of a sorted sequence.
+    """
+    if len(nums) < 2:
+        return None
+    return nums[1] - nums[0]
