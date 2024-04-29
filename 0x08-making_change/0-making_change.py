@@ -23,7 +23,7 @@ def makeChange(coins, total):
         num_coins -= 1
     return -1
 
-  # coins.sort()
+# coins.sort()
     """
     i = -1
     num_coins = 0
